@@ -9,7 +9,6 @@ import (
 	"log"
 	"os"
 	"strings"
-	"time"
 
 	"github.com/docker/docker/api/types"
 	"github.com/docker/docker/api/types/container"
@@ -97,10 +96,10 @@ func (e DockerExecutor) Execute(test TestCase) TestResult {
 		}
 	}
 
-	duration := time.Duration(1 * time.Second)
-	defer cli.ContainerStop(ctx, resp.ID, &duration)
+	duration := 1
+	defer cli.ContainerStop(ctx, resp.ID, container.StopOptions{Signal: "SIGTERM", Timeout: &duration})
 
-	status := container.ContainerWaitOKBody{}
+	status := container.WaitResponse{}
 	statusCh, errC := cli.ContainerWait(ctx, resp.ID, "")
 	select {
 	case err := <-errC:
