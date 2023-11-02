@@ -131,8 +131,8 @@ func (e DockerExecutor) Execute(test TestCase) TestResult {
 	// Write test result
 	test.Result = CommandResult{
 		ExitCode: int(status.StatusCode),
-		Stdout:   strings.TrimSpace(strings.Replace(stdout.String(), "\r\n", "\n", -1)),
-		Stderr:   strings.TrimSpace(strings.Replace(stderr.String(), "\r\n", "\n", -1)),
+		Stdout:   strings.TrimSpace(strings.ReplaceAll(stdout.String(), "\r\n", "\n")),
+		Stderr:   strings.TrimSpace(strings.ReplaceAll(stderr.String(), "\r\n", "\n")),
 	}
 
 	log.Println("title: '"+test.Title+"'", " ExitCode: ", test.Result.ExitCode)
